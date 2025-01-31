@@ -6,16 +6,19 @@ class Solution {
         }
 
         int[][] ans = new int[k][2];
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>(Comparator.comparingDouble(a -> Math.sqrt(a[0] * a[0] + a[1] * a[1])));
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((b,a) -> Integer.compare(a[0] * a[0] + a[1] * a[1],b[0] * b[0] + b[1] * b[1]));
 
         for(int[] point : points)
         {
-            minHeap.offer(point);
+            maxHeap.offer(point);
+            if (maxHeap.size() > k) {
+                maxHeap.poll();
+            }
         }
 
-        for (int i = 0; i < k; ++i) {
-            int[] point = minHeap.poll();
-            ans[i] = new int[]{point[0], point[1]};
+        int i = 0;
+        while (!maxHeap.isEmpty()) {
+            ans[i++] = maxHeap.poll();
         }
         return ans;
     }
