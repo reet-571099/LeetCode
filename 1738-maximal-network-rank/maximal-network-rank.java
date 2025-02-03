@@ -1,29 +1,35 @@
+import java.util.*;
+
 class Solution {
     public int maximalNetworkRank(int n, int[][] roads) {
-        Map<Integer,List<Integer>> map = new HashMap<>();
+        int[] degree = new int[n]; // Store degree (number of roads) of each city
+        Set<String> edges = new HashSet<>(); // Store direct connections
         
-        for (int[] edge : roads) {
-            int u = edge[0], v = edge[1];
-            map.putIfAbsent(u,new ArrayList<>());
-            map.get(u).add(v);
-
-            map.putIfAbsent(v,new ArrayList<>());
-            map.get(v).add(u);
+        // Step 1: Count degrees & store edges
+        for (int[] road : roads) {
+            int u = road[0], v = road[1];
+            degree[u]++;
+            degree[v]++;
+            edges.add(u + "," + v); // Store connection as string
+            edges.add(v + "," + u); // Bidirectional
         }
-        int max = 0;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=i+1;j<n;j++)
-            {
-               int m = map.getOrDefault(i, Collections.emptyList()).size();
-               int t = map.getOrDefault(j, Collections.emptyList()).size();
-                int ans = m+t;
-                if (map.getOrDefault(i, Collections.emptyList()).contains(j)) {
-                    ans=ans-1;
+
+        int maxRank = 0;
+
+        // Step 2: Compare only meaningful pairs
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int rank = degree[i] + degree[j];
+
+                // If directly connected, subtract 1
+                if (edges.contains(i + "," + j)) {
+                    rank--;
                 }
-                max = Math.max(max,ans);
+
+                maxRank = Math.max(maxRank, rank);
             }
         }
-        return max;
+
+        return maxRank;
     }
 }
