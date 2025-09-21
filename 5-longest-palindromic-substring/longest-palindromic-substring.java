@@ -1,10 +1,7 @@
 class Solution {
     public String longestPalindrome(String s) {
         int n = s.length();
-        if(s==null || s.length()<=1)
-        {
-            return s;
-        }
+        if (s == null || s.length() == 0) return "";
         String ans = "";
         ans = s.substring(0,1);
         boolean [][] dp = new boolean[n][n];
@@ -20,10 +17,9 @@ class Solution {
                 if(s.charAt(i)==s.charAt(j) && (len==2 || dp[i+1][j-1]))
                 {
                     dp[i][j] = true;
-                    String sub = s.substring(i,j+1);
                     if(len>ans.length())
                     {
-                        ans = sub;
+                        ans = s.substring(i,j+1);
                     }
                 }
             }
